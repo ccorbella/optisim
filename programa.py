@@ -21,6 +21,7 @@ def supermercat(T,nl,N):
 
     espera_clients    = np.empty(T)
     temps_espera      = np.empty(0)
+    llista_caixes     = np.arange(0,N,1)
     
     data = {k: [] for k in xrange(N)}
     
@@ -51,7 +52,7 @@ def supermercat(T,nl,N):
                 propera_sortida              = np.min(properes_sortides[caixes != 0])
         
         else:
-            idx_caixa                        = np.argmin(properes_sortides[caixes != 0]) 
+            idx_caixa                        = llista_caixes[caixes != 0][np.argmin(properes_sortides[caixes != 0])]
             element = data[idx_caixa].pop(0) #eliminem el primer element de la llista
             caixes[idx_caixa]               -= 1
 
@@ -64,9 +65,7 @@ def supermercat(T,nl,N):
             
             if (caixes > (caixes[idx_caixa] +1) ).sum() > 0:  #alguna caixa amb mes gent que la nostra
                 if idx_caixa >= nl: #caixa rapida! cas especial
-                    for idx in np.where(caixes > (caixes[idx_caixa]+1)):
-                        print idx
-                        print data[idx]
+                    for idx in np.where(caixes > (caixes[idx_caixa]+1))[0]:
                         if data[idx][-1][1] <= 10: #el num d'articles de l'ultima persona de la fila que es mes llarga
                                                    #que la meva es menor que 10 i pot anar xt a una caixa rapida
                             data[idx_caixa].append(data[idx].pop()) #faig el canvi de cua
@@ -90,18 +89,12 @@ def supermercat(T,nl,N):
             propera_sortida = np.min(properes_sortides[caixes!=0])
         t = min(propera_entrada,propera_sortida)
         espera_clients[int(math.floor(to)):int(math.ceil(t))] = caixes.sum()
-        #print t
-        #print idx_caixa
-        #print np.vstack((caixes, properes_sortides))
 
     return np.mean(espera_clients), np.mean(temps_espera)
 
-""" 
+ 
 super = np.empty(10)
 for i in xrange(10):
-    super[i] = supermercat(60*60*12,1,20)[1]
+    super[i] = supermercat(60*60*12,17,20)[1]
     
 print(np.mean(super))
-"""
-
-print supermercat(20*60,1,5)
