@@ -114,7 +114,12 @@ def supermercat(T,nl,N):
         if caixes.sum() > 0: #definim ara quina es la propera sortida
             propera_sortida = np.min(properes_sortides[caixes!=0])
             
-        t = min(propera_entrada,propera_sortida) #Actualitzem el temps fins al proper esdeveniments
+        #Actualitzem el temps fins al proper esdeveniment
+        if t<T: #el proper esdeveniment serà el mínim
+            t = min(propera_entrada,propera_sortida) 
+        else: #hem tancat portes ja i només hem d'atendre la gent que queda dins
+            t = propera_sortida
+            
         espera_clients[int(math.floor(to)):int(math.ceil(t))] = caixes.sum() #Clientstotals esperant entre els dos esdeveniments
 
     return np.mean(espera_clients), np.mean(temps_espera) #mitjana
