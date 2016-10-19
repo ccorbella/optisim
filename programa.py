@@ -111,7 +111,7 @@ def supermercat(T,nl,N):
                         properes_sortides[idx_caixa] = t + temps_cobrar(n)
                         propera_sortida              = np.min(properes_sortides[caixes != 0])
 
-        if caixes.sum() > 0: #definim ara quina es la propera sortida. caaal ara??!! es raro, no?
+        if caixes.sum() > 0: #definim ara quina es la propera sortida
             propera_sortida = np.min(properes_sortides[caixes!=0])
             
         t = min(propera_entrada,propera_sortida) #Actualitzem el temps fins al proper esdeveniments
