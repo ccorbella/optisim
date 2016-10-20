@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+#@Autors: Corbella Bagot, Conrad; Guasch Morgades, Maria; Ripoll Oliveras, Albert; Taulé Flores, Pere
+#Creat: 10/10/2016
 
 #IMPORTS
 import numpy as np
@@ -16,6 +18,7 @@ def temps_cobrar(articles):
     mes un temps de 2-6 min (distr uniforme). """
     return 3*articles + random.uniform(120,360)
 
+#FUNCIÓ PRINCIPAL
 def supermercat(T,nl,N):
     """                            Programa principal de la simulació
     T: jornada laboral (en segons) // nl: numero de caixes lentes // N: nombre total de caixes"""
@@ -45,7 +48,6 @@ def supermercat(T,nl,N):
             #Afegim el número d'articles i el temps de cobrar
             n                  = numero_articles()
             t_cobrar           = temps_cobrar(n)
-            ll_t_cobrar = np.append(ll_t_cobrar, t_cobrar) ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             
             #Assignem la caixa amb la cua més curta al client 
             if n <= 10:                                     #Pot anar a qualsevol caixa
@@ -82,9 +84,7 @@ def supermercat(T,nl,N):
             #Calculem quan s'ha esperat la persona que acaba de ser atesa
             temps_espera                     = np.append(temps_espera,t-element[0] - element[2]) #restem el temps d'arribada [0]
                                                                                                  #i el de cobrar [2]
-            if t - element[0] - element[2] < -0.001:
-                print 'Alerta!!'
-            
+             
             
             #Si a la caixa que acaba de cobrar queda gent fent cua, comencem a cobrar al següent:
             if caixes[idx_caixa] > 0: 
@@ -102,7 +102,7 @@ def supermercat(T,nl,N):
                         
                         if data[idx][-1][1] <= 10: #si el num d'articles de l'ultima persona de la fila es menor que 10
                             
-                            data[idx_caixa].append(data[idx].pop()) #xt pot fer el canvi de cua
+                            data[idx_caixa].append(data[idx].pop()) #pot fer el canvi de cua
                             caixes[idx_caixa] += 1
                             caixes[idx]       -= 1 
 
@@ -122,7 +122,7 @@ def supermercat(T,nl,N):
                         properes_sortides[idx_caixa] = t + data[idx_caixa][0][2]             #afegim el temps de cobrar
                         propera_sortida              = np.min(properes_sortides[caixes != 0])
                         
-        if caixes.sum() > 0: #definim ara quina es la propera sortida. caaal ara??!! es raro, no?
+        if caixes.sum() > 0: #definim ara quina es la propera sortida
             propera_sortida = np.min(properes_sortides[caixes!=0])
         
         #Actualitzem el temps fins al proper esdeveniment
@@ -132,18 +132,10 @@ def supermercat(T,nl,N):
             t = propera_sortida
             
             
-        espera_clients[int(math.floor(to)):int(math.ceil(t))] = caixes.sum() #Clientstotals esperant entre els dos esdeveniments
+        espera_clients[int(math.floor(to)):int(math.ceil(t))] = caixes.sum() #Clients totals esperant entre els dos esdeveniments
 
-    return np.mean(espera_clients), np.mean(temps_espera), np.mean(ll_t_cobrar) #mitjana
+    return np.mean(espera_clients), np.mean(temps_espera) 
+    #Al llarg del treball s'han canviat les variables que retorna la funció per poder visualitzar diferents aspectes.
+    #Els aquí indicats són la mitjana de clients esperant i la mitjana del temps d'espera, que són els nostres comptadors estadístics.
 
-
-N = 100
-clients = np.empty(N); espera = np.empty(N); cobrar = np.empty(N)
-
-for i in xrange(N):
-    clients[i], espera[i], cobrar[i] = supermercat(12*60*60, 17,20)
-    if espera[i] < 0:
-        print 'ALERTA!!'
-
-print np.mean(clients), np.mean(espera), np.mean(cobrar)
     
