@@ -126,7 +126,7 @@ def supermercat(T,nl,N):
             propera_sortida = np.min(properes_sortides[caixes!=0])
         
         #Actualitzem el temps fins al proper esdeveniment
-        if t<T: #el proper esdeveniment serà el mínim
+        if propera_entrada<T: #el proper esdeveniment serà el mínim
             t = min(propera_entrada,propera_sortida) 
         else: #hem tancat portes ja i només hem d'atendre la gent que queda dins
             t = propera_sortida
