@@ -30,6 +30,7 @@ def supermercat(T,nl,N):
     t                 = 0                   #rellotge
 
     espera_clients    = np.empty(int(1.1*T))         #num de clients esperant a cada instant t de temps
+    espera_clients_v  = 0                            #acumulat del num de clients esperant a cada instant t de temps
     espera_temps      = np.zeros(int(1.1*T))         #temps d'espera 'instantani' a cada instant t (mitja dels ultims 10 valors)
     temps_espera      = np.empty(0)                  #temps d'espera de cada client
     llista_caixes     = np.arange(0,N,1)             #llista auxiliar
@@ -133,6 +134,7 @@ def supermercat(T,nl,N):
             
             
         espera_clients[int(math.floor(to)):int(math.ceil(t))] = caixes.sum() #Clients totals esperant entre els dos esdeveniments
+        espera_clients_v += caixes.sum()*(t-to)
         if len(temps_espera) > 10:
             espera_temps[int(math.floor(to)):int(math.ceil(t))] = np.mean(temps_espera[-10:])
 
