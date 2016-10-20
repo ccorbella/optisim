@@ -36,7 +36,7 @@ def supermercat(T,nl,N):
     
     data = {k: [] for k in xrange(N)}       #per cada caixa k disposem d'una llista de tuples (temps d'arribada, num articles)
     
-    while (t < T): # or (caixes.sum() > 0):    #Comencem el loop
+    while (t < T) or (caixes.sum() > 0):    #Comencem el loop
 
         to = t                              #Var auxiliar per graficar coses                        
         
