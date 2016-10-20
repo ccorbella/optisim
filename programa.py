@@ -29,10 +29,10 @@ def supermercat(T,nl,N):
     properes_sortides = np.zeros(N)         #quan acabarà la primera persona a la caixa i
     t                 = 0                   #rellotge
 
-    espera_clients    = np.empty(T)         #num de clients esperant a cada instant t de temps
-    temps_espera      = np.empty(0)         #temps d'espera de cada client
-    llista_caixes     = np.arange(0,N,1)    #llista auxiliar
-    ll_t_cobrar       = np.empty(0)
+    espera_clients    = np.empty(int(1.1*T))         #num de clients esperant a cada instant t de temps
+    espera_temps      = np.zeros(int(1.1*T))         #temps d'espera 'instantani' a cada instant t (mitja dels ultims 10 valors)
+    temps_espera      = np.empty(0)                  #temps d'espera de cada client
+    llista_caixes     = np.arange(0,N,1)             #llista auxiliar
     
     data = {k: [] for k in xrange(N)}       #per cada caixa k disposem d'una llista de tuples (temps d'arribada, num articles)
     
@@ -133,9 +133,16 @@ def supermercat(T,nl,N):
             
             
         espera_clients[int(math.floor(to)):int(math.ceil(t))] = caixes.sum() #Clients totals esperant entre els dos esdeveniments
+        if len(temps_espera) > 10:
+            espera_temps[int(math.floor(to)):int(math.ceil(t))] = np.mean(temps_espera[-10:])
 
-    return np.mean(espera_clients), np.mean(temps_espera) 
-    #Al llarg del treball s'han canviat les variables que retorna la funció per poder visualitzar diferents aspectes.
-    #Els aquí indicats són la mitjana de clients esperant i la mitjana del temps d'espera, que són els nostres comptadors estadístics.
-
+    """Es retorna:
+        -np.mean(espera_clients_v): mitjana del nombre de clients esperant
+        -np.mean(temps_espera)    : mitjana de temps esperat per cada client
+        -espera_clients           : vector que conté els clients que s'estan esperant en cada instant de temps (discretitzant a segons)
+        -espera_temps             : vector que conté el temps d'espera en cada instant de temps, calculat com la mitjana dels últims
+                                    10 temps d'espera """
+    
+    
+    return np.mean(espera_clients_v), np.mean(temps_espera), espera_clients, espera_temps 
     
